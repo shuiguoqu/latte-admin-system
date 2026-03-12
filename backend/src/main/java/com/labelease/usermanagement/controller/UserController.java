@@ -2,6 +2,7 @@ package com.labelease.usermanagement.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.labelease.usermanagement.common.Result;
+import com.labelease.usermanagement.dto.ChangePasswordDTO;
 import com.labelease.usermanagement.entity.Order;
 import com.labelease.usermanagement.entity.User;
 import com.labelease.usermanagement.service.OrderService;
@@ -155,5 +156,21 @@ public class UserController {
         result.put("user", user);
         result.put("orders", orders);
         return Result.success(result);
+    }
+
+    @Operation(summary = "修改当前用户密码")
+    @PutMapping("/change-password")
+    public Result<Void> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO, HttpServletRequest request) {
+        String username = (String) request.getAttribute("currentUsername");
+        User currentUser = userService.getByUsername(username);
+        if (currentUser == null) {
+            return Result.error(404, "用户不存在");
+        }
+
+        boolean success = userService.changePassword(currentUser.getId(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        if (!success) {
+            return Result.error(400, "旧密码错误或修改失败");
+        }
+        return Result.success("密码修改成功", null);
     }
 }

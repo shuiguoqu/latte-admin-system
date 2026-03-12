@@ -14,4 +14,7 @@ public interface UserService extends IService<User> {
 
     /** 根据用户名查询 */
     User getByUsername(String username);
+
+    /** 修改用户密码 */
+    boolean changePassword(Long userId, String oldPassword, String newPassword);
 }
