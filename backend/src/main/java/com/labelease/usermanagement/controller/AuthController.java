@@ -2,22 +2,20 @@ package com.labelease.usermanagement.controller;
 
 import com.labelease.usermanagement.common.JwtUtil;
 import com.labelease.usermanagement.common.Result;
+import com.labelease.usermanagement.dto.ChangePasswordRequest;
 import com.labelease.usermanagement.entity.User;
+import com.labelease.usermanagement.service.ChangePasswordResult;
 import com.labelease.usermanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-/**
- * 认证控制器 - 登录认证
- * 采用无状态 JWT 方案，退出由前端清理 token 实现，无需后端 /logout 接口。
- * 密码验证采用 BCrypt 哈希比对，不再明文比较。
- * 登录成功后返回 token、username、realName、role、id 供前端鉴权使用。
- */
 @Tag(name = "认证管理", description = "登录与令牌管理")
 @RestController
 @RequestMapping("/api/auth")
@@ -55,6 +53,27 @@ public class AuthController {
                 "realName", user.getRealName(),
                 "role", role,
                 "id", user.getId()));
+    }
+
+    @Operation(summary = "修改密码")
+    @PostMapping("/change-password")
+    public Result<Void> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            HttpServletRequest httpRequest) {
+        String username = (String) httpRequest.getAttribute("currentUsername");
+        if (username == null) {
+            return Result.error(401, "未登录");
+        }
+
+        ChangePasswordResult result = userService.changePassword(
+                username,
+                request.getOldPassword(),
+                request.getNewPassword());
+
+        if (!result.isSuccess()) {
+            return Result.error(400, result.getMessage());
+        }
+        return Result.success(result.getMessage(), null);
     }
 
     @Operation(summary = "健康检查")
