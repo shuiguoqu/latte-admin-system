@@ -2,6 +2,7 @@ package com.labelease.usermanagement.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.labelease.usermanagement.common.Result;
+import com.labelease.usermanagement.dto.ChangePasswordDTO;
 import com.labelease.usermanagement.entity.Order;
 import com.labelease.usermanagement.entity.User;
 import com.labelease.usermanagement.service.OrderService;
@@ -155,5 +156,31 @@ public class UserController {
         result.put("user", user);
         result.put("orders", orders);
         return Result.success(result);
+    }
+
+    @Operation(summary = "修改当前用户密码")
+    @PutMapping("/change-password")
+    public Result<Void> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO, HttpServletRequest request) {
+        String username = (String) request.getAttribute("currentUsername");
+        User currentUser = userService.getByUsername(username);
+        if (currentUser == null) {
+            return Result.error(404, "用户不存在");
+        }
+
+        if (changePasswordDTO.getOldPassword().equals(changePasswordDTO.getNewPassword())) {
+            return Result.badRequest("新密码不能与旧密码相同");
+        }
+
+        int resultCode = userService.changePassword(currentUser.getId(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        switch (resultCode) {
+            case 0:
+                return Result.success("密码修改成功", null);
+            case 1:
+                return Result.error(404, "用户不存在");
+            case 2:
+                return Result.badRequest("旧密码错误");
+            default:
+                return Result.error(500, "修改失败，请稍后重试");
+        }
     }
 }
