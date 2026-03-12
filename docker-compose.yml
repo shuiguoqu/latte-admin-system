@@ -1,0 +1,76 @@
+# COMPOSE_PROJECT_NAME: labelease-label-3974-slot0
+# RUN_SLOT: 0
+# Ports: frontend=3010, backend=3011, db=3012
+
+services:
+  # ===== 数据库服务 =====
+  db:
+    image: mysql:8.0
+    container_name: label3974-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: user_management
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+      TZ: Asia/Shanghai
+    ports:
+      - "3012:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./backend/src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=caching_sha2_password
+      --init-connect="SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+      --skip-character-set-client-handshake
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - app-network
+
+  # ===== 后端服务 =====
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: label3974-backend
+    restart: unless-stopped
+    ports:
+      - "3011:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/user_management?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123456
+      TZ: Asia/Shanghai
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ===== 前端服务 =====
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: label3974-frontend
+    restart: unless-stopped
+    ports:
+      - "3010:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

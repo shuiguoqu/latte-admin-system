@@ -1,0 +1,86 @@
+/**
+ * 燕麦拿铁 (Oatmeal Latte) 设计系统
+ * CSS 变量统一管理颜色、圆角与动效
+ */
+:root {
+  /* ===== 色彩系统 ===== */
+  --bg-primary: #f8f5f1;        /* 浅米白 - 页面基底 */
+  --bg-surface: #fefdfb;        /* 暖白 - 卡片/模块 */
+  --text-primary: #4b5563;      /* 暖深灰 - 主要文字 */
+  --text-secondary: #a8a29e;    /* 灰褐色 - 次要文字 */
+  --color-interactive: #0d9488; /* 灰绿色 - 主要按钮/链接 */
+  --color-interactive-hover: #0f766e; /* 深灰绿 - 悬停态 */
+  --color-warning: #f59e0b;     /* 琥珀色 - 警告状态 */
+  --color-danger: #ef4444;      /* 红色 - 危险操作 */
+  --color-success: #10b981;     /* 绿色 - 成功状态 */
+  --border-color: #d6d3d1;      /* 浅陶土色 - 边框分割线 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+  /* ===== 圆角 ===== */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* ===== 间距 ===== */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* ===== 动效 ===== */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+}
+
+/* ===== Element Plus 主题覆盖 ===== */
+:root {
+  --el-color-primary: #0d9488;
+  --el-color-primary-light-3: #5eead4;
+  --el-color-primary-light-5: #99f6e4;
+  --el-color-primary-light-7: #ccfbf1;
+  --el-color-primary-light-9: #f0fdfa;
+  --el-color-primary-dark-2: #0f766e;
+  --el-border-radius-base: 12px;
+  --el-border-radius-small: 8px;
+  --el-bg-color: #fefdfb;
+  --el-bg-color-page: #f8f5f1;
+  --el-text-color-primary: #4b5563;
+  --el-text-color-regular: #4b5563;
+  --el-text-color-secondary: #a8a29e;
+  --el-border-color: #d6d3d1;
+  --el-border-color-light: #e7e5e4;
+}
+
+/* ===== 通用过渡 ===== */
+.el-button,
+.el-card,
+.el-input__wrapper,
+.el-table__row {
+  transition: all var(--transition-normal) !important;
+}
+
+/* ===== 表格行悬停 ===== */
+.el-table__row:hover {
+  background-color: #f0fdfa !important;
+}
+
+/* ===== 卡片样式增强 ===== */
+.el-card {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* ===== 按钮圆角 ===== */
+.el-button {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ===== 输入框圆角 ===== */
+.el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+}
