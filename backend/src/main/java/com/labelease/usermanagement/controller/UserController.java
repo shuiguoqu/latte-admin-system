@@ -167,10 +167,20 @@ public class UserController {
             return Result.error(404, "用户不存在");
         }
 
-        boolean success = userService.changePassword(currentUser.getId(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
-        if (!success) {
-            return Result.error(400, "旧密码错误或修改失败");
+        if (changePasswordDTO.getOldPassword().equals(changePasswordDTO.getNewPassword())) {
+            return Result.badRequest("新密码不能与旧密码相同");
         }
-        return Result.success("密码修改成功", null);
+
+        int resultCode = userService.changePassword(currentUser.getId(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        switch (resultCode) {
+            case 0:
+                return Result.success("密码修改成功", null);
+            case 1:
+                return Result.error(404, "用户不存在");
+            case 2:
+                return Result.badRequest("旧密码错误");
+            default:
+                return Result.error(500, "修改失败，请稍后重试");
+        }
     }
 }

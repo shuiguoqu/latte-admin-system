@@ -39,15 +39,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean changePassword(Long userId, String oldPassword, String newPassword) {
+    public int changePassword(Long userId, String oldPassword, String newPassword) {
         User user = getById(userId);
         if (user == null) {
-            return false;
+            return 1;
         }
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            return false;
+            return 2;
         }
         user.setPassword(passwordEncoder.encode(newPassword));
-        return updateById(user);
+        return updateById(user) ? 0 : 3;
     }
 }
