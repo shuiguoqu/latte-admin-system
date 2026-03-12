@@ -1,5 +1,6 @@
 package com.labelease.usermanagement.config;
 
+import com.labelease.usermanagement.common.BusinessException;
 import com.labelease.usermanagement.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +13,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /** 业务异常 */
+    @ExceptionHandler(BusinessException.class)
+    public Result<?> handleBusinessException(BusinessException e) {
+        log.warn("业务异常: {}", e.getMessage());
+        return Result.error(e.getCode(), e.getMessage());
+    }
 
     /** 参数校验异常 */
     @ExceptionHandler(MethodArgumentNotValidException.class)
