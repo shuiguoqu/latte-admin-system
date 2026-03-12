@@ -11,7 +11,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -33,6 +36,7 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "分页查询用户列表")
     @GetMapping
@@ -155,5 +159,39 @@ public class UserController {
         result.put("user", user);
         result.put("orders", orders);
         return Result.success(result);
+    }
+
+    @Operation(summary = "修改密码（用户自己）")
+    @PostMapping("/change-password")
+    public Result<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
+        String username = (String) httpRequest.getAttribute("currentUsername");
+
+        User user = userService.getByUsername(username);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            return Result.error(400, "旧密码错误");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        boolean updated = userService.updateById(user);
+
+        if (!updated) {
+            return Result.error(500, "密码修改失败");
+        }
+
+        return Result.success("密码修改成功", null);
+    }
+
+    @Data
+    public static class ChangePasswordRequest {
+        @NotBlank(message = "旧密码不能为空")
+        private String oldPassword;
+
+        @NotBlank(message = "新密码不能为空")
+        private String newPassword;
     }
 }
