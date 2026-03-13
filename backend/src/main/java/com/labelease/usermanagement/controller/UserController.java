@@ -156,4 +156,21 @@ public class UserController {
         result.put("orders", orders);
         return Result.success(result);
     }
+
+    @Operation(summary = "解锁账户（仅管理员）")
+    @PostMapping("/{id}/unlock")
+    public Result<Void> unlockAccount(@PathVariable Long id, HttpServletRequest request) {
+        String role = (String) request.getAttribute("currentRole");
+        if (!"ADMIN".equals(role)) {
+            return Result.forbidden("权限不足，仅管理员可解锁账户");
+        }
+
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+
+        userService.unlockAccount(user.getUsername());
+        return Result.success("解锁成功", null);
+    }
 }

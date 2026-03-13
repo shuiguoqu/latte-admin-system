@@ -41,6 +41,12 @@ public class User {
     @TableLogic
     private Integer deleted;
 
+    /** 登录失败次数 */
+    private Integer loginFailedCount;
+
+    /** 账户锁定到期时间 */
+    private LocalDateTime lockUntil;
+
     /** 创建时间 */
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
