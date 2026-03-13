@@ -14,4 +14,7 @@ public interface UserService extends IService<User> {
 
     /** 根据用户名查询 */
     User getByUsername(String username);
+
+    /** 解锁账号（管理员操作） */
+    boolean unlockAccount(Long userId);
 }
