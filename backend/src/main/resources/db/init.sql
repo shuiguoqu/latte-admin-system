@@ -71,3 +71,58 @@ INSERT INTO `t_order` (`order_no`, `user_id`, `product_name`, `amount`, `status`
 ('ORD20260009', 5, '便携式咖啡研磨器',      329.00, 0),
 ('ORD20260010', 1, '天然乳胶枕头',         268.00, 2)
 ON DUPLICATE KEY UPDATE `order_no` = VALUES(`order_no`);
+
+INSERT INTO `t_user` (`username`, `password`, `real_name`, `email`, `phone`, `role`, `status`, `create_time`) VALUES
+('today_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '今日用户1', 'today1@test.com', '13800000006', 'USER', 1, NOW()),
+('today_user2', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '今日用户2', 'today2@test.com', '13800000007', 'USER', 1, NOW()),
+('today_user3', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '今日用户3', 'today3@test.com', '13800000008', 'USER', 1, NOW()),
+('week_user1',  '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '本周用户1', 'week1@test.com',  '13800000009', 'USER', 1, DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('week_user2',  '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '本周用户2', 'week2@test.com',  '13800000010', 'USER', 1, DATE_SUB(NOW(), INTERVAL 5 DAY)),
+('month_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '本月用户1', 'month1@test.com', '13800000011', 'USER', 1, DATE_SUB(NOW(), INTERVAL 10 DAY)),
+('month_user2', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '本月用户2', 'month2@test.com', '13800000012', 'USER', 1, DATE_SUB(NOW(), INTERVAL 15 DAY))
+ON DUPLICATE KEY UPDATE `username` = VALUES(`username`);
+
+INSERT INTO `t_user` (`username`, `password`, `real_name`, `email`, `phone`, `role`, `status`, `create_time`) VALUES
+('m2_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '上月用户1', 'm2u1@test.com', '13800001001', 'USER', 1, DATE_SUB(NOW(), INTERVAL 1 MONTH)),
+('m2_user2', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '上月用户2', 'm2u2@test.com', '13800001002', 'USER', 1, DATE_SUB(NOW(), INTERVAL 1 MONTH)),
+('m3_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前两月用户1', 'm3u1@test.com', '13800001003', 'USER', 1, DATE_SUB(NOW(), INTERVAL 2 MONTH)),
+('m3_user2', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前两月用户2', 'm3u2@test.com', '13800001004', 'USER', 1, DATE_SUB(NOW(), INTERVAL 2 MONTH)),
+('m3_user3', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前两月用户3', 'm3u3@test.com', '13800001005', 'USER', 1, DATE_SUB(NOW(), INTERVAL 2 MONTH)),
+('m4_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前三用户1', 'm4u1@test.com', '13800001006', 'USER', 1, DATE_SUB(NOW(), INTERVAL 3 MONTH)),
+('m4_user2', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前三用户2', 'm4u2@test.com', '13800001007', 'USER', 1, DATE_SUB(NOW(), INTERVAL 3 MONTH)),
+('m5_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前四用户1', 'm5u1@test.com', '13800001008', 'USER', 1, DATE_SUB(NOW(), INTERVAL 4 MONTH)),
+('m6_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前五用户1', 'm6u1@test.com', '13800001009', 'USER', 1, DATE_SUB(NOW(), INTERVAL 5 MONTH)),
+('m7_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前六用户1', 'm7u1@test.com', '13800001010', 'USER', 1, DATE_SUB(NOW(), INTERVAL 6 MONTH)),
+('m8_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前七用户1', 'm8u1@test.com', '13800001011', 'USER', 1, DATE_SUB(NOW(), INTERVAL 7 MONTH)),
+('m9_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前八用户1', 'm9u1@test.com', '13800001012', 'USER', 1, DATE_SUB(NOW(), INTERVAL 8 MONTH)),
+('m10_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前九用户1', 'm10u1@test.com', '13800001013', 'USER', 1, DATE_SUB(NOW(), INTERVAL 9 MONTH)),
+('m11_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前十用户1', 'm11u1@test.com', '13800001014', 'USER', 1, DATE_SUB(NOW(), INTERVAL 10 MONTH)),
+('m12_user1', '$2a$10$uJYYxbN5mMsu.5fms0KTS./3D1dZxldCfy2RTHNLbuzZ8jPq7UgU6', '前十一用户1', 'm12u1@test.com', '13800001015', 'USER', 1, DATE_SUB(NOW(), INTERVAL 11 MONTH))
+ON DUPLICATE KEY UPDATE `username` = VALUES(`username`);
+
+INSERT INTO `t_order` (`order_no`, `user_id`, `product_name`, `amount`, `status`, `create_time`) VALUES
+('TOP0001', 1, 'MacBook Pro 16寸', 19999.00, 3, DATE_SUB(NOW(), INTERVAL 1 DAY)),
+('TOP0002', 2, 'iPhone 15 Pro Max', 9999.00, 3, DATE_SUB(NOW(), INTERVAL 2 DAY)),
+('TOP0003', 3, '索尼A7M4相机', 16999.00, 2, DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('TOP0004', 4, '大疆御3无人机', 13888.00, 1, DATE_SUB(NOW(), INTERVAL 4 DAY)),
+('TOP0005', 5, '华为Mate 60 Pro', 6999.00, 0, DATE_SUB(NOW(), INTERVAL 5 DAY)),
+('TOP0006', 1, '联想拯救者Y9000X', 8999.00, 3, DATE_SUB(NOW(), INTERVAL 6 DAY)),
+('TOP0007', 2, '三星S24 Ultra', 7999.00, 4, DATE_SUB(NOW(), INTERVAL 7 DAY)),
+('TOP0008', 3, '戴森V15吸尘器', 5499.00, 3, DATE_SUB(NOW(), INTERVAL 8 DAY)),
+('TOP0009', 4, '索尼WH-1000XM5', 2999.00, 2, DATE_SUB(NOW(), INTERVAL 9 DAY)),
+('TOP0010', 5, '任天堂Switch OLED', 2299.00, 1, DATE_SUB(NOW(), INTERVAL 10 DAY)),
+('TOP0011', 1, 'iPad Pro 12.9', 8499.00, 3, DATE_SUB(NOW(), INTERVAL 11 DAY)),
+('STAT_PAY01', 1, '待支付订单1', 99.00, 0, NOW()),
+('STAT_PAY02', 2, '待支付订单2', 199.00, 0, NOW()),
+('STAT_PAY03', 3, '已支付订单1', 299.00, 1, NOW()),
+('STAT_PAY04', 4, '已支付订单2', 399.00, 1, NOW()),
+('STAT_PAY05', 5, '已支付订单3', 499.00, 1, NOW()),
+('STAT_PAY06', 1, '已发货订单1', 599.00, 2, NOW()),
+('STAT_PAY07', 2, '已发货订单2', 699.00, 2, NOW()),
+('STAT_PAY08', 3, '已完成订单1', 799.00, 3, NOW()),
+('STAT_PAY09', 4, '已完成订单2', 899.00, 3, NOW()),
+('STAT_PAY10', 5, '已完成订单3', 999.00, 3, NOW()),
+('STAT_PAY11', 1, '已完成订单4', 1099.00, 3, NOW()),
+('STAT_PAY12', 2, '已取消订单1', 1199.00, 4, NOW()),
+('STAT_PAY13', 3, '已取消订单2', 1299.00, 4, NOW())
+ON DUPLICATE KEY UPDATE `order_no` = VALUES(`order_no`);
