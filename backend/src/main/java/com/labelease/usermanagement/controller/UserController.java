@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.labelease.usermanagement.common.Result;
 import com.labelease.usermanagement.entity.Order;
 import com.labelease.usermanagement.entity.User;
+import com.labelease.usermanagement.service.LoginAttemptService;
 import com.labelease.usermanagement.service.OrderService;
 import com.labelease.usermanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,7 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final LoginAttemptService loginAttemptService;
 
     @Operation(summary = "分页查询用户列表")
     @GetMapping
@@ -155,5 +157,26 @@ public class UserController {
         result.put("user", user);
         result.put("orders", orders);
         return Result.success(result);
+    }
+
+    @Operation(summary = "手动解锁账户（仅管理员）")
+    @PostMapping("/{id}/unlock")
+    public Result<Void> unlockAccount(@PathVariable Long id, HttpServletRequest request) {
+        String role = (String) request.getAttribute("currentRole");
+        if (!"ADMIN".equals(role)) {
+            return Result.forbidden("权限不足，仅管理员可解锁账户");
+        }
+
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+
+        boolean unlocked = loginAttemptService.unlockAccount(id);
+        if (!unlocked) {
+            return Result.error(500, "解锁失败");
+        }
+
+        return Result.success("账户解锁成功", null);
     }
 }
