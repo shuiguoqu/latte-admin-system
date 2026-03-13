@@ -41,6 +41,12 @@ jwt:
   secret: oatmeal-latte-user-management-jwt-secret-key-2026
   expiration: 86400000
 
+# 登录防爆破配置
+security:
+  brute-force:
+    max-failed-attempts: 5
+    lock-duration-minutes: 30
+
 logging:
   level:
     com.labelease: DEBUG

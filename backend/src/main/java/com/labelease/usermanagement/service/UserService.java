@@ -14,4 +14,16 @@ public interface UserService extends IService<User> {
 
     /** 根据用户名查询 */
     User getByUsername(String username);
+
+    /** 增加登录失败次数 */
+    void increaseLoginFailedCount(String username);
+
+    /** 重置登录失败次数 */
+    void resetLoginFailedCount(String username);
+
+    /** 锁定账户 */
+    void lockAccount(String username, int lockDurationMinutes);
+
+    /** 解锁账户 */
+    void unlockAccount(String username);
 }

@@ -7,9 +7,12 @@ import com.labelease.usermanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import com.labelease.usermanagement.config.BruteForceProtectionConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -27,6 +30,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final BruteForceProtectionConfig bruteForceProtectionConfig;
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
@@ -39,13 +43,35 @@ public class AuthController {
         }
 
         User user = userService.getByUsername(username);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null) {
             return Result.error(401, "用户名或密码错误");
+        }
+
+        if (user.getLockUntil() != null && user.getLockUntil().isAfter(LocalDateTime.now())) {
+            long minutes = Duration.between(LocalDateTime.now(), user.getLockUntil()).toMinutes();
+            if (minutes <= 0) {
+                minutes = 1;
+            }
+            return Result.error(423, "账户已被锁定，请 " + minutes + " 分钟后再试");
         }
 
         if (user.getStatus() != 1) {
             return Result.error(403, "账户已被禁用");
         }
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            userService.increaseLoginFailedCount(username);
+            int failedCount = user.getLoginFailedCount() == null ? 1 : user.getLoginFailedCount() + 1;
+            int remaining = bruteForceProtectionConfig.getMaxFailedAttempts() - failedCount;
+            if (remaining > 0) {
+                return Result.error(401, "用户名或密码错误，还有 " + remaining + " 次机会");
+            } else {
+                userService.lockAccount(username, bruteForceProtectionConfig.getLockDurationMinutes());
+                return Result.error(423, "密码错误次数过多，账户已被锁定 " + bruteForceProtectionConfig.getLockDurationMinutes() + " 分钟");
+            }
+        }
+
+        userService.resetLoginFailedCount(username);
 
         String role = user.getRole() != null ? user.getRole() : "USER";
         String token = jwtUtil.generateToken(username, role);
