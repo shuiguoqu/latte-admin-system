@@ -41,6 +41,13 @@ jwt:
   secret: oatmeal-latte-user-management-jwt-secret-key-2026
   expiration: 86400000
 
+# 登录安全配置（防爆破）
+login:
+  security:
+    enabled: true              # 是否启用防爆破功能
+    max-attempts: 5            # 最大登录失败次数，超过则锁定账户
+    lock-duration-minutes: 30  # 锁定持续时间（分钟）
+
 logging:
   level:
     com.labelease: DEBUG

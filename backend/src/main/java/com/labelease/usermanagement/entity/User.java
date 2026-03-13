@@ -37,6 +37,12 @@ public class User {
     /** 角色：ADMIN-管理员，USER-普通用户 */
     private String role;
 
+    /** 登录失败次数 */
+    private Integer loginFailedAttempts;
+
+    /** 账户锁定截止时间 */
+    private LocalDateTime lockUntil;
+
     /** 逻辑删除标记 */
     @TableLogic
     private Integer deleted;
