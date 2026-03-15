@@ -3,6 +3,7 @@ package com.labelease.usermanagement.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.labelease.usermanagement.common.OrderStatusMachine;
 import com.labelease.usermanagement.entity.Order;
 import com.labelease.usermanagement.mapper.OrderMapper;
 import com.labelease.usermanagement.service.OrderService;
@@ -31,5 +32,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     public List<Order> listByUserId(Long userId) {
         return baseMapper.selectByUserId(userId);
+    }
+
+    @Override
+    public void updateStatus(Long orderId, Integer newStatus) {
+        Order order = getById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("订单不存在");
+        }
+        OrderStatusMachine.validateTransition(order.getStatus(), newStatus);
+        order.setStatus(newStatus);
+        updateById(order);
     }
 }
