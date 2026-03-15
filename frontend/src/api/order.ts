@@ -1,7 +1,7 @@
 import request from './request'
 
 /** 订单分页查询 */
-export function getOrders(params: { current: number; size: number; keyword?: string }) {
+export function getOrders(params: { current: number; size: number; keyword?: string; minAmount?: number; maxAmount?: number }) {
   return request.get('/orders', { params })
 }
 

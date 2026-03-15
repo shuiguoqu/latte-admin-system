@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,8 +30,10 @@ public class OrderController {
     public Result<Page<Order>> list(
             @Parameter(description = "当前页码") @RequestParam(defaultValue = "1") int current,
             @Parameter(description = "每页条数") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "搜索关键词") @RequestParam(required = false) String keyword) {
-        return Result.success(orderService.pageOrders(current, size, keyword));
+            @Parameter(description = "搜索关键词") @RequestParam(required = false) String keyword,
+            @Parameter(description = "最低金额") @RequestParam(required = false) BigDecimal minAmount,
+            @Parameter(description = "最高金额") @RequestParam(required = false) BigDecimal maxAmount) {
+        return Result.success(orderService.pageOrders(current, size, keyword, minAmount, maxAmount));
     }
 
     @Operation(summary = "根据ID查询订单")
