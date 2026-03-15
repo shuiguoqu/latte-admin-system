@@ -76,4 +76,12 @@ public class OrderController {
         }
         return Result.success("删除成功", null);
     }
+
+    @Operation(summary = "更新订单状态")
+    @PutMapping("/{id}/status")
+    public Result<Order> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
+        orderService.updateStatus(id, status);
+        Order order = orderService.getById(id);
+        return Result.success("状态更新成功", order);
+    }
 }
