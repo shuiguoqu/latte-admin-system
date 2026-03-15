@@ -76,4 +76,19 @@ public class OrderController {
         }
         return Result.success("删除成功", null);
     }
+
+    @Operation(summary = "修改订单状态")
+    @PutMapping("/{id}/status")
+    public Result<Void> updateStatus(
+            @PathVariable Long id,
+            @Parameter(description = "新状态") @RequestParam Integer status) {
+        try {
+            orderService.updateStatus(id, status);
+            return Result.success("状态更新成功", null);
+        } catch (IllegalStateException e) {
+            return Result.error(400, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return Result.error(404, e.getMessage());
+        }
+    }
 }

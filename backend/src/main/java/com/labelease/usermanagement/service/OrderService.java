@@ -16,4 +16,7 @@ public interface OrderService extends IService<Order> {
 
     /** 根据用户ID查询订单列表 */
     List<Order> listByUserId(Long userId);
+
+    /** 更新订单状态 */
+    void updateStatus(Long orderId, Integer newStatus);
 }
