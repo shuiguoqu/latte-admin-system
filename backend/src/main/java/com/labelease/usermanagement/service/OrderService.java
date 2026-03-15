@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.labelease.usermanagement.entity.Order;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 public interface OrderService extends IService<Order> {
 
     /** 分页查询订单 */
-    Page<Order> pageOrders(int current, int size, String keyword);
+    Page<Order> pageOrders(int current, int size, String keyword, BigDecimal minAmount, BigDecimal maxAmount);
 
     /** 根据用户ID查询订单列表 */
     List<Order> listByUserId(Long userId);
