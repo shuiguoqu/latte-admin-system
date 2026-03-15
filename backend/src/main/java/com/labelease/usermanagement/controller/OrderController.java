@@ -76,4 +76,17 @@ public class OrderController {
         }
         return Result.success("删除成功", null);
     }
+
+    @Operation(summary = "修改订单状态")
+    @PutMapping("/{id}/status")
+    public Result<Order> updateStatus(
+            @Parameter(description = "订单ID") @PathVariable Long id,
+            @Parameter(description = "目标状态：0-待支付，1-已支付，2-已发货，3-已完成，4-已取消") @RequestParam Integer status) {
+        try {
+            Order updatedOrder = orderService.updateOrderStatus(id, status);
+            return Result.success("状态修改成功", updatedOrder);
+        } catch (IllegalStateException e) {
+            return Result.error(400, e.getMessage());
+        }
+    }
 }
