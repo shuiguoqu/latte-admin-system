@@ -32,4 +32,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getByUsername(String username) {
         return baseMapper.selectByUsername(username);
     }
+
+    @Override
+    public boolean unlockAccount(Long userId) {
+        User user = getById(userId);
+        if (user == null) {
+            return false;
+        }
+        return baseMapper.clearLoginFailure(userId) > 0;
+    }
 }

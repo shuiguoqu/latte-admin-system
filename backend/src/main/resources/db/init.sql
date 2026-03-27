@@ -13,17 +13,19 @@ USE `user_management`;
 -- 用户表
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `t_user` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `username`    VARCHAR(50)  NOT NULL COMMENT '用户名（登录用）',
-    `password`    VARCHAR(255) NOT NULL COMMENT '密码',
-    `real_name`   VARCHAR(100) DEFAULT NULL COMMENT '真实姓名',
-    `email`       VARCHAR(100) DEFAULT NULL COMMENT '邮箱',
-    `phone`       VARCHAR(20)  DEFAULT NULL COMMENT '手机号',
-    `role`        VARCHAR(20)  NOT NULL DEFAULT 'USER' COMMENT '角色：ADMIN-管理员，USER-普通用户',
-    `status`      TINYINT      NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
-    `deleted`     TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-已删除',
-    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `id`               BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `username`         VARCHAR(50)  NOT NULL COMMENT '用户名（登录用）',
+    `password`         VARCHAR(255) NOT NULL COMMENT '密码',
+    `real_name`        VARCHAR(100) DEFAULT NULL COMMENT '真实姓名',
+    `email`            VARCHAR(100) DEFAULT NULL COMMENT '邮箱',
+    `phone`            VARCHAR(20)  DEFAULT NULL COMMENT '手机号',
+    `role`             VARCHAR(20)  NOT NULL DEFAULT 'USER' COMMENT '角色：ADMIN-管理员，USER-普通用户',
+    `status`           TINYINT      NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
+    `login_fail_count` INT          NOT NULL DEFAULT 0 COMMENT '登录失败次数',
+    `locked_until`     DATETIME     DEFAULT NULL COMMENT '账号锁定截止时间',
+    `deleted`          TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-已删除',
+    `create_time`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
